@@ -14,8 +14,9 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//TODO: Agregar url api + apiKey.
-		//String urlAPI = "";
-		//ConsumoAPI consumoAPI = new ConsumoAPI().obtenerDatos();
+		String busqueda = "Game of thrones";
+		String urlAPI = "https://www.omdbapi.com/?i=tt3896198&apikey=c42a82a5&t="+busqueda;
+		String json = new ConsumoAPI().obtenerDatos(urlAPI);
+		System.out.println(json);
 	}
 }
