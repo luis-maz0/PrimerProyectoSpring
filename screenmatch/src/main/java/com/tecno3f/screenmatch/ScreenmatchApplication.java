@@ -1,5 +1,6 @@
 package com.tecno3f.screenmatch;
 
+import com.tecno3f.screenmatch.model.DataEpisodio;
 import com.tecno3f.screenmatch.model.DataSerie;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
@@ -16,15 +17,22 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		String busqueda = "matrix";
-		String urlAPI = "https://www.omdbapi.com/?i=tt3896198&apikey=c42a82a5&t="+busqueda;
+		String busqueda = "Game+of+thrones";
+		String urlAPI = "https://www.omdbapi.com/?i=tt3896198&apikey=c42a82a5&t=".concat(busqueda);
 		String json = new ConsumoAPI().obtenerDatos(urlAPI);
 
 		System.out.println(json);
 		ConversionDatos conversor = new ConversionDatos();
 
 		DataSerie datosSerie = conversor.obtenerDatos(json, DataSerie.class);
-
 		System.out.println(datosSerie);
+
+		//Datos episodio de determinada temporada
+		//TODO: Ver documentación. Cambio de url de la API para consultar temporadas & episodios.
+		urlAPI = "https://www.omdbapi.com/?t=Game%20of%20Thrones&Season=1&Episode=1&apikey=c42a82a5";
+		json = new ConsumoAPI().obtenerDatos(urlAPI);
+		DataEpisodio datosEpisodio = conversor.obtenerDatos(json, DataEpisodio.class);
+		System.out.println(datosEpisodio);
+
 	}
 }
