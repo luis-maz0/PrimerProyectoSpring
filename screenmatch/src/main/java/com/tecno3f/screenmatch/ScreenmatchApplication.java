@@ -2,11 +2,14 @@ package com.tecno3f.screenmatch;
 
 import com.tecno3f.screenmatch.model.DataEpisodio;
 import com.tecno3f.screenmatch.model.DataSerie;
+import com.tecno3f.screenmatch.model.DataTemporada;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -34,5 +37,14 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		DataEpisodio datosEpisodio = conversor.obtenerDatos(json, DataEpisodio.class);
 		System.out.println(datosEpisodio);
 
+		//Ver todas las temporadas
+		ArrayList<DataTemporada> temporadas = new ArrayList<>();
+
+		for (int i = 1; i <= Integer.valueOf(datosSerie.totalTemporadas()); i++) {
+			json = new ConsumoAPI().obtenerDatos("https://www.omdbapi.com/?t=Game%20of%20Thrones&Season="+i+"&apikey=c42a82a5");
+			DataTemporada datosTemporada = conversor.obtenerDatos(json,DataTemporada.class);
+			temporadas.add(datosTemporada);
+		}
+		temporadas.forEach(System.out::println);
 	}
 }
