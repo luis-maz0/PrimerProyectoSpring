@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tecno3f.screenmatch.model.DataEpisodio;
 import com.tecno3f.screenmatch.model.DataSerie;
 import com.tecno3f.screenmatch.model.DataTemporada;
+import com.tecno3f.screenmatch.model.Episodio;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 
@@ -59,5 +60,12 @@ public class Principal {
                 .sorted(Comparator.comparing(DataEpisodio::puntuacionImdb).reversed())
                 .limit(10)
                 .forEach(System.out::println);
+
+        //Convirtiendo los datos a una lista de tipo Episodio
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(temp -> temp.episodios().stream()
+                        .map(episodio -> new Episodio(temp.numeroTemprada(), episodio) ))
+                .collect(Collectors.toList());
+        episodios.forEach(System.out::println);
     }
 }
