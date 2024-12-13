@@ -8,6 +8,8 @@ import com.tecno3f.screenmatch.model.Episodio;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -62,10 +64,27 @@ public class Principal {
                 .forEach(System.out::println);
 
         //Convirtiendo los datos a una lista de tipo Episodio
+        System.out.println("---------------TODOS LOS EPISODIOS-------------");
         List<Episodio> episodios = temporadas.stream()
                 .flatMap(temp -> temp.episodios().stream()
                         .map(episodio -> new Episodio(temp.numeroTemprada(), episodio) ))
                 .collect(Collectors.toList());
         episodios.forEach(System.out::println);
+
+        //Filtrando episodios por fecha
+        System.out.println("------------POR FECHA---------------");
+        System.out.println("Ingrese año: ");
+        Scanner sc = new Scanner(System.in);
+        Integer fecha = sc.nextInt();
+
+        LocalDate fechaBusqueda = LocalDate.of( fecha, 1,1 );
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        episodios.stream()
+                .filter( e -> e.getFechaLanzamiento() != null && e.getFechaLanzamiento().isAfter(fechaBusqueda))
+                .forEach( e -> System.out.println(
+                        "Temporada: " + e.getTemporada()+
+                                "\nEpisodio: "+e.getNumeroEpisodio()+
+                                "\nFechaLanzamiento: "+e.getFechaLanzamiento().format(dtf)
+                ) );
     }
 }
