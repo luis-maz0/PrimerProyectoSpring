@@ -10,6 +10,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -46,5 +50,19 @@ public class ScreenmatchApplication implements CommandLineRunner {
 			temporadas.add(datosTemporada);
 		}
 		temporadas.forEach(System.out::println);
+
+		//Lista de datos de cada episodio
+		List<DataEpisodio> listaEpisodios = temporadas.stream()
+				.flatMap( temp -> temp.episodios().stream())
+				.collect(Collectors.toList());
+		System.out.println( listaEpisodios );
+
+		//Filtrar top 10 mejores episodios
+		System.out.println("----------------TOP 10 Mejores episodios------------------");
+		listaEpisodios.stream()
+				.filter( episode -> !episode.puntuacionImdb().equalsIgnoreCase("N/A"))
+				.sorted(Comparator.comparing(DataEpisodio::puntuacionImdb).reversed())
+				.limit(10)
+				.forEach(System.out::println);
 	}
 }

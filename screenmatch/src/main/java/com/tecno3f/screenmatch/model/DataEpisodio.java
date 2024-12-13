@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public record DataEpisodio(
         @JsonAlias("Title") String titulo,
         @JsonAlias("Released") String fechaLanzamiento,
-        @JsonAlias("Episode") String episodio
+        @JsonAlias("Episode") String episodio,
+        @JsonAlias("imdbRating") String puntuacionImdb
 ) {
 }
