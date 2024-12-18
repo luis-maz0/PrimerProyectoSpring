@@ -91,12 +91,19 @@ public class Principal {
         String nombreEpisodioBuscado = sc.next();
 
         Optional<Episodio> episodioEncontrado = episodios.stream()
-                .filter(e -> e.getTitulo().equals(nombreEpisodioBuscado))
+                .filter(e -> e.getTitulo().toLowerCase().contains(nombreEpisodioBuscado.toLowerCase()))
                 .findFirst();
         if( episodioEncontrado.isPresent()){
             System.out.println("Episodio encontrado" + episodioEncontrado.get());
         }else{
             System.out.println("NO SE ENCONTRO DICHO EPISODIO");
         }
+        //Obtener promedio de temporadas
+        Map<Integer, Double> promedioPuntuacionTemporadas = episodios.stream()
+                .filter( e -> e.getPuntuacionImdb() > 0 )
+                .collect(Collectors.groupingBy( Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getPuntuacionImdb)));
+        System.out.println(promedioPuntuacionTemporadas);
+
     }
 }
