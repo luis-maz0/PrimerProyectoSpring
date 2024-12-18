@@ -10,10 +10,7 @@ import com.tecno3f.screenmatch.service.ConversionDatos;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -59,8 +56,11 @@ public class Principal {
         System.out.println("----------------TOP 10 Mejores episodios------------------");
         listaEpisodios.stream()
                 .filter( episode -> !episode.puntuacionImdb().equalsIgnoreCase("N/A"))
+                .peek(e -> System.out.println("Filtro " + e))
                 .sorted(Comparator.comparing(DataEpisodio::puntuacionImdb).reversed())
+                .peek(e -> System.out.println("Orden " + e))
                 .limit(10)
+                .peek(e -> System.out.println("Limite" + e))
                 .forEach(System.out::println);
 
         //Convirtiendo los datos a una lista de tipo Episodio
@@ -86,5 +86,17 @@ public class Principal {
                                 "\nEpisodio: "+e.getNumeroEpisodio()+
                                 "\nFechaLanzamiento: "+e.getFechaLanzamiento().format(dtf)
                 ) );
+        //Busqueda episodio por titulo
+        System.out.println("Ingrese el nombre del titulo del espisodio: ");
+        String nombreEpisodioBuscado = sc.next();
+
+        Optional<Episodio> episodioEncontrado = episodios.stream()
+                .filter(e -> e.getTitulo().equals(nombreEpisodioBuscado))
+                .findFirst();
+        if( episodioEncontrado.isPresent()){
+            System.out.println("Episodio encontrado" + episodioEncontrado.get());
+        }else{
+            System.out.println("NO SE ENCONTRO DICHO EPISODIO");
+        }
     }
 }
