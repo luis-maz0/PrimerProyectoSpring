@@ -24,11 +24,13 @@ public class Principal {
     final String query = "&Season=";
     private ConversionDatos conversor = new ConversionDatos();
 
+    //TODO: Agregar Menu y separar métodos.
+
     public void mostrarMenu() throws JsonProcessingException {
         //BUSQUEDA SERIE
         System.out.println("Ingrese nombre la serie: ");
         busqueda = sc.next();
-        json = new ConsumoAPI().obtenerDatos(base_url + busqueda.replace(" ", "%20") + api_Key);
+        json = new ConsumoAPI().obtenerDatos(base_url + busqueda.replace(" ", "+") + api_Key);
         DataSerie dataSerie = conversor.obtenerDatos(json, DataSerie.class);
         System.out.println("DATOS DE " + busqueda.toUpperCase());
         System.out.println(dataSerie);
