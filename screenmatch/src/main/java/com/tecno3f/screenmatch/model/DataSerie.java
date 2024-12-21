@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record DataSerie(
-        //TODO: Agregar: Genero, Sinopsis, Poster y Actores.
         @JsonAlias("Title") String titulo,
         @JsonAlias("Year") String anio,
         @JsonAlias("imdbRating") String puntuacion,
-        @JsonAlias("totalSeasons") String totalTemporadas) {
+        @JsonAlias("totalSeasons") String totalTemporadas,
+        @JsonAlias("Poster")String poster,
+        @JsonAlias("Genre") String genero,
+        @JsonAlias("Actors")String actores,
+        @JsonAlias("Plot")String sinopsis){
 }

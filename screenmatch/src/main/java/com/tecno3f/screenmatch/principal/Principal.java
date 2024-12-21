@@ -14,37 +14,83 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
-    //PRIMER REFACTOR
-
     private Scanner sc = new Scanner(System.in);
     private String busqueda;
     private String json;
-    final String base_url = "https://www.omdbapi.com/?t=";
-    final String api_Key = "&apikey=c42a82a5";
-    final String query = "&Season=";
+    private final String BASE_URL = "https://www.omdbapi.com/?t=";
+    private final String API_KEY = "&apikey=c42a82a5";
+    private final String QUERY = "&Season=";
     private ConversionDatos conversor = new ConversionDatos();
-
-    //TODO: Agregar Menu y separar métodos.
+    private ArrayList<DataSerie> seriesBuscadas = new ArrayList<>();
 
     public void mostrarMenu() throws JsonProcessingException {
-        //BUSQUEDA SERIE
-        System.out.println("Ingrese nombre la serie: ");
-        busqueda = sc.next();
-        json = new ConsumoAPI().obtenerDatos(base_url + busqueda.replace(" ", "+") + api_Key);
-        DataSerie dataSerie = conversor.obtenerDatos(json, DataSerie.class);
-        System.out.println("DATOS DE " + busqueda.toUpperCase());
-        System.out.println(dataSerie);
+        int opcion = -1;
+        String menu = """
+                ---------------------
+                | 1. Buscar series
+                | 2. Buscar episodios
+                | 3. Mostrar series buscadas
+                | 0. Salir
+                ---------------------
+                """;
+        do {
+            System.out.println(menu);
+            opcion = Integer.parseInt(sc.next());
+            sc.nextLine();
+            switch (opcion) {
+                case 0:
+                    System.out.println("Adios!");
+                    break;
+                case 1:
+                    System.out.println("**** Buscando serie **** ");
+                    this.buscarSerie();
+                    break;
+                case 2:
+                    System.out.println("**** Buscando episodio ****");
+                    this.mostrarTodosEpisodiosSerie();
+                    break;
+                case 3:
+                    System.out.println("**** Series buscadas ****");
+                    this.mostrarSeriesBuscadas();
+                    break;
+                default:
+                    System.out.println("Opción invalida");
+                    break;
+            }
+        } while (opcion != 0);
+    }
 
-        //BUSQUEDA TEMPORADAS
+    public DataSerie getDataSerie() throws JsonProcessingException {
+        System.out.println("Ingrese nombre de la serie: ");
+        busqueda = sc.next();
+        sc.nextLine();
+        json = new ConsumoAPI().obtenerDatos(BASE_URL + busqueda.replace(" ", "+") + API_KEY);
+        return conversor.obtenerDatos(json, DataSerie.class);
+    }
+
+    public void mostrarTodosEpisodiosSerie() throws JsonProcessingException {
+        DataSerie dataSerie = this.getDataSerie();
         ArrayList<DataTemporada> temporadas = new ArrayList<>();
 
-        for (int i = 1; i <= Integer.valueOf(dataSerie.totalTemporadas()); i++) {
-            json = new ConsumoAPI().obtenerDatos(base_url + busqueda.replace(" ", "%20") + query + i + api_Key);
+        for (int i = 1; i <= Integer.parseInt(dataSerie.totalTemporadas()); i++) {
+            json = new ConsumoAPI().obtenerDatos(BASE_URL + busqueda.replace(" ", "+") + QUERY + i + API_KEY);
             DataTemporada dataTemporada = conversor.obtenerDatos(json, DataTemporada.class);
             temporadas.add(dataTemporada);
         }
         temporadas.forEach(System.out::println);
+    }
 
+    public void buscarSerie() throws JsonProcessingException {
+        DataSerie dataSerie = this.getDataSerie();
+        seriesBuscadas.add(dataSerie);
+        System.out.println(dataSerie);
+    }
+
+    public void mostrarSeriesBuscadas() {
+        seriesBuscadas.forEach(System.out::println);
+    }
+}
+/*
         //MOSTRAR LOS TITULOS DE CADA TEMPORADA
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
 
@@ -112,5 +158,5 @@ public class Principal {
                 .filter( e -> e.getPuntuacionImdb() > 0 )
                 .collect(Collectors.summarizingDouble( Episodio::getPuntuacionImdb ));
         System.out.println( estadisticasEpisodios );
-    }
-}
+    */
+
