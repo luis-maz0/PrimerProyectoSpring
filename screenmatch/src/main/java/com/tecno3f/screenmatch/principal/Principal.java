@@ -1,10 +1,7 @@
 package com.tecno3f.screenmatch.principal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tecno3f.screenmatch.model.DataEpisodio;
-import com.tecno3f.screenmatch.model.DataSerie;
-import com.tecno3f.screenmatch.model.DataTemporada;
-import com.tecno3f.screenmatch.model.Episodio;
+import com.tecno3f.screenmatch.model.*;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 
@@ -87,7 +84,12 @@ public class Principal {
     }
 
     public void mostrarSeriesBuscadas() {
-        seriesBuscadas.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series = seriesBuscadas.stream()
+                .map( d -> new Serie(d))
+                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero));
     }
 }
 /*
