@@ -1,12 +1,10 @@
 package com.tecno3f.screenmatch.principal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.tecno3f.screenmatch.Repository.SerieRepository;
 import com.tecno3f.screenmatch.model.*;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +17,11 @@ public class Principal {
     private final String QUERY = "&Season=";
     private ConversionDatos conversor = new ConversionDatos();
     private ArrayList<DataSerie> seriesBuscadas = new ArrayList<>();
+    private SerieRepository repositorio;
+
+    public Principal(SerieRepository repository) {
+        this.repositorio = repository;
+    }
 
     public void mostrarMenu() throws JsonProcessingException {
         int opcion = -1;
@@ -79,7 +82,10 @@ public class Principal {
 
     public void buscarSerie() throws JsonProcessingException {
         DataSerie dataSerie = this.getDataSerie();
-        seriesBuscadas.add(dataSerie);
+        //Guardar en db.
+        Serie serie = new Serie(dataSerie);
+        repositorio.save(serie);
+        //seriesBuscadas.add(dataSerie);
         System.out.println(dataSerie);
     }
 

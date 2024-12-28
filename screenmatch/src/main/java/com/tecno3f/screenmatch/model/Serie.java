@@ -1,6 +1,7 @@
 package com.tecno3f.screenmatch.model;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
@@ -19,6 +20,8 @@ public class Serie {
     private Categoria genero;
     private String actores;
     private String sinopsis;
+    @Transient
+    private List<Episodio> episodios;
 
     public Serie(DataSerie datosSerie) {
         this.titulo = datosSerie.titulo();
