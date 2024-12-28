@@ -89,7 +89,8 @@ public class Principal {
                 .map( d -> new Serie(d))
                 .collect(Collectors.toList());
         series.stream()
-                .sorted(Comparator.comparing(Serie::getGenero));
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
 /*

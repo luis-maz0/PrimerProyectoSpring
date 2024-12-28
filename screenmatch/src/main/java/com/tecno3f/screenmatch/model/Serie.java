@@ -31,7 +31,7 @@ public class Serie {
     @Override
     public String toString() {
         return "Serie{" +
-                ", genero=" + genero +
+                "genero=" + genero +
                 "titulo='" + titulo + '\'' +
                 ", anio='" + anio + '\'' +
                 ", puntuacion=" + puntuacion +
