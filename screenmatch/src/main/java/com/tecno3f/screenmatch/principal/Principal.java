@@ -6,7 +6,6 @@ import com.tecno3f.screenmatch.model.*;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner sc = new Scanner(System.in);
@@ -90,10 +89,7 @@ public class Principal {
     }
 
     public void mostrarSeriesBuscadas() {
-        List<Serie> series = new ArrayList<>();
-        series = seriesBuscadas.stream()
-                .map( d -> new Serie(d))
-                .collect(Collectors.toList());
+        List<Serie> series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);

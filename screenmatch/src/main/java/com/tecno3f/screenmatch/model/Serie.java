@@ -23,6 +23,8 @@ public class Serie {
     @Transient
     private List<Episodio> episodios;
 
+    public Serie(){};
+
     public Serie(DataSerie datosSerie) {
         this.titulo = datosSerie.titulo();
         this.anio = datosSerie.anio();
