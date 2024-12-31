@@ -1,15 +1,25 @@
 package com.tecno3f.screenmatch.model;
 
+import jakarta.persistence.*;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.Date;
 
+@Entity
+@Table(name = "episodio")
 public class Episodio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
     private Double puntuacionImdb;
     private LocalDate fechaLanzamiento;
+    @ManyToOne
+    private Serie serie;
+
+    public Episodio(){}
 
     public Episodio( String numTemp,DataEpisodio e) {
         this.temporada = Integer.valueOf(numTemp);
@@ -27,7 +37,9 @@ public class Episodio {
         }
 
     }
-
+    public Long getId() {
+        return id;
+    }
     public Integer getTemporada() {
         return temporada;
     }
