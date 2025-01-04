@@ -32,6 +32,7 @@ public class Principal {
                 | 2. Buscar episodios
                 | 3. Mostrar series buscadas
                 | 4. Buscar series por titulo
+                | 5. Mostrar top 5 mejores series
                 | 0. Salir
                 ---------------------
                 """;
@@ -59,11 +60,20 @@ public class Principal {
                     System.out.println("**** Series buscadas por titulo ****");
                     this.buscarSeriePorTitulo();
                     break;
+                case 5:
+                    System.out.println("**** Top 5 mejores series ****");
+                    this.buscarTop5Series();
+                    break;
                 default:
                     System.out.println("Opción invalida");
                     break;
             }
         } while (opcion != 0);
+    }
+
+    private void buscarTop5Series() {
+        List<Serie> topSeries = repositorio.findTop5ByOrderByPuntuacionDesc();
+        topSeries.forEach( s -> System.out.println(s.getTitulo() + " - Evaluacion: "+ s.getPuntuacion()));
     }
 
     private void buscarSeriePorTitulo() {
@@ -138,6 +148,7 @@ public class Principal {
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
     }
+
 }
 /*
         //MOSTRAR LOS TITULOS DE CADA TEMPORADA
