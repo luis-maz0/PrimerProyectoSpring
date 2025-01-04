@@ -33,6 +33,7 @@ public class Principal {
                 | 3. Mostrar series buscadas
                 | 4. Buscar series por titulo
                 | 5. Mostrar top 5 mejores series
+                | 6. Buscar por genero
                 | 0. Salir
                 ---------------------
                 """;
@@ -64,11 +65,25 @@ public class Principal {
                     System.out.println("**** Top 5 mejores series ****");
                     this.buscarTop5Series();
                     break;
+                case 6:
+                    System.out.println("**** Buscando por genero ****");
+                    this.buscarSeriePorGenero();
+                    break;
                 default:
                     System.out.println("Opción invalida");
                     break;
             }
         } while (opcion != 0);
+    }
+
+    private void buscarSeriePorGenero() {
+        System.out.println("Ingrese genero de la serie: ");
+        busqueda = sc.next();
+        sc.nextLine();
+        Categoria categoria = Categoria.fromEspanol(busqueda);
+        List<Serie> seriesPorCategoria = repositorio.findByGenero(categoria);
+        System.out.println("Las series por categoria " + busqueda);
+        seriesPorCategoria.forEach(System.out::println);
     }
 
     private void buscarTop5Series() {
