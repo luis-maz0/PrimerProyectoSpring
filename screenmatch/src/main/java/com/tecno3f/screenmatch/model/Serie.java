@@ -20,7 +20,7 @@ public class Serie {
     private Categoria genero;
     private String actores;
     private String sinopsis;
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios;
 
     public Serie(){};
@@ -48,6 +48,42 @@ public class Serie {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getAnio() {
+        return anio;
+    }
+
+    public Double getPuntuacion() {
+        return puntuacion;
+    }
+
+    public Integer getTotalTemporadas() {
+        return totalTemporadas;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public String getActores() {
+        return actores;
+    }
+
+    public String getSinopsis() {
+        return sinopsis;
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
     }
 
     @Override

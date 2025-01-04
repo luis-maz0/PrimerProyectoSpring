@@ -6,6 +6,7 @@ import com.tecno3f.screenmatch.model.*;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner sc = new Scanner(System.in);
@@ -17,6 +18,7 @@ public class Principal {
     private ConversionDatos conversor = new ConversionDatos();
     private ArrayList<DataSerie> seriesBuscadas = new ArrayList<>();
     private SerieRepository repositorio;
+    private List<Serie> series;
 
     public Principal(SerieRepository repository) {
         this.repositorio = repository;
@@ -68,15 +70,37 @@ public class Principal {
     }
 
     public void mostrarTodosEpisodiosSerie() throws JsonProcessingException {
-        DataSerie dataSerie = this.getDataSerie();
-        ArrayList<DataTemporada> temporadas = new ArrayList<>();
 
-        for (int i = 1; i <= Integer.parseInt(dataSerie.totalTemporadas()); i++) {
-            json = new ConsumoAPI().obtenerDatos(BASE_URL + busqueda.replace(" ", "+") + QUERY + i + API_KEY);
-            DataTemporada dataTemporada = conversor.obtenerDatos(json, DataTemporada.class);
-            temporadas.add(dataTemporada);
+        //DataSerie dataSerie = this.getDataSerie();
+        //Se trabajará con los datos de la base de datos
+        this.mostrarSeriesBuscadas();
+
+        System.out.println("Ingrese el nombre de la serie: ");
+        String nombreSerie = sc.next();
+        sc.nextLine();
+
+        Optional<Serie> serie = series.stream()
+                .filter( s -> s.getTitulo().toLowerCase().contains(nombreSerie.toLowerCase()))
+                .findFirst();
+
+        if( serie.isPresent()){
+            ArrayList<DataTemporada> temporadas = new ArrayList<>();
+            Serie serieEncontrada = serie.get();
+            for (int i = 1; i <= serieEncontrada.getTotalTemporadas(); i++) {
+                json = new ConsumoAPI().obtenerDatos(BASE_URL + serieEncontrada.getTitulo().replace(" ", "+") + QUERY + i + API_KEY);
+                DataTemporada dataTemporada = conversor.obtenerDatos(json, DataTemporada.class);
+                temporadas.add(dataTemporada);
+            }
+            temporadas.forEach(System.out::println);
+            //Convertir temporadas en episodios
+            List<Episodio> episodios = temporadas.stream()
+                    .flatMap( d -> d.episodios().stream()
+                            .map(e -> new Episodio(d.numeroTemprada(),e)))
+                    .toList();
+            //Se guardan los episodios en la lista de la clase
+            serieEncontrada.setEpisodios(episodios);
+            repositorio.save(serieEncontrada);
         }
-        temporadas.forEach(System.out::println);
     }
 
     public void buscarSerie() throws JsonProcessingException {
@@ -89,7 +113,7 @@ public class Principal {
     }
 
     public void mostrarSeriesBuscadas() {
-        List<Serie> series = repositorio.findAll();
+        series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
