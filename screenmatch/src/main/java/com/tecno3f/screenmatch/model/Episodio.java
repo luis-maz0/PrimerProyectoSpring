@@ -56,6 +56,10 @@ public class Episodio {
         return fechaLanzamiento;
     }
 
+    public void setSerie(Serie serie) {
+        this.serie = serie;
+    }
+
     @Override
     public String toString() {
         return "Episodio{" +
