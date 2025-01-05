@@ -89,7 +89,7 @@ public class Principal {
         var puntuacion = sc.nextDouble();
         sc.nextLine();
 
-        List<Serie> series = repositorio.findByTotalTemporadasGreaterThanEqualAndPuntuacionGreaterThanEqual(cantTemporadas, puntuacion);
+        List<Serie> series = repositorio.seriesPorTemporadaYPuntuacion(cantTemporadas, puntuacion);
 
         if(!series.isEmpty()){
             series.forEach( serie -> System.out.println(serie.getTitulo()+ " - " + serie.getTotalTemporadas() + " - " + serie.getPuntuacion()) );
