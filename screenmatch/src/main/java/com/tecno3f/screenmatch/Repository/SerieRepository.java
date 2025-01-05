@@ -11,5 +11,5 @@ public interface SerieRepository extends JpaRepository<Serie,Long> {
     Optional<Serie> findByTituloContainsIgnoreCase(String tituloSerie);
     List<Serie> findTop5ByOrderByPuntuacionDesc();
     List<Serie> findByGenero(Categoria categoria);
-
+    List<Serie> findByTotalTemporadasGreaterThanEqualAndPuntuacionGreaterThanEqual(Integer temporadas, Double puntuacion);
 }

@@ -34,6 +34,7 @@ public class Principal {
                 | 4. Buscar series por titulo
                 | 5. Mostrar top 5 mejores series
                 | 6. Buscar por genero
+                | 7. Buscar por cant. temporadas y puntuacion 
                 | 0. Salir
                 ---------------------
                 """;
@@ -69,11 +70,33 @@ public class Principal {
                     System.out.println("**** Buscando por genero ****");
                     this.buscarSeriePorGenero();
                     break;
+                case 7:
+                    System.out.println("**** Buscando por cant. temporadas y puntuacion ****");
+                    this.buscarSeriePorTemporadaAndPuntuacion();
+                    break;
                 default:
                     System.out.println("Opción invalida");
                     break;
             }
         } while (opcion != 0);
+    }
+
+    private void buscarSeriePorTemporadaAndPuntuacion() {
+        System.out.println("Ingrese cantidad de temporadas: ");
+        var cantTemporadas = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Ingrese puntuacion: ");
+        var puntuacion = sc.nextDouble();
+        sc.nextLine();
+
+        List<Serie> series = repositorio.findByTotalTemporadasGreaterThanEqualAndPuntuacionGreaterThanEqual(cantTemporadas, puntuacion);
+
+        if(!series.isEmpty()){
+            series.forEach( serie -> System.out.println(serie.getTitulo()+ " - " + serie.getTotalTemporadas() + " - " + serie.getPuntuacion()) );
+        }else {
+            System.out.println("No se encontraron series :(");
+        }
+
     }
 
     private void buscarSeriePorGenero() {
