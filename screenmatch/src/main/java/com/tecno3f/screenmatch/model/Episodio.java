@@ -55,6 +55,9 @@ public class Episodio {
     public LocalDate getFechaLanzamiento() {
         return fechaLanzamiento;
     }
+    public String getNombreSerie(){
+        return serie.getTitulo();
+    }
 
     public void setSerie(Serie serie) {
         this.serie = serie;

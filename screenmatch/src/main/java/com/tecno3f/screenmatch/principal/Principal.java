@@ -6,7 +6,6 @@ import com.tecno3f.screenmatch.model.*;
 import com.tecno3f.screenmatch.service.ConsumoAPI;
 import com.tecno3f.screenmatch.service.ConversionDatos;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner sc = new Scanner(System.in);
@@ -19,6 +18,7 @@ public class Principal {
     private ArrayList<DataSerie> seriesBuscadas = new ArrayList<>();
     private SerieRepository repositorio;
     private List<Serie> series;
+    private Optional<Serie> serieBuscada;
 
     public Principal(SerieRepository repository) {
         this.repositorio = repository;
@@ -35,6 +35,8 @@ public class Principal {
                 | 5. Mostrar top 5 mejores series
                 | 6. Buscar por genero
                 | 7. Buscar por cant. temporadas y puntuacion 
+                | 8. Buscar episodio por nombre
+                | 9. Buscar top 5 episodios 
                 | 0. Salir
                 ---------------------
                 """;
@@ -74,6 +76,14 @@ public class Principal {
                     System.out.println("**** Buscando por cant. temporadas y puntuacion ****");
                     this.buscarSeriePorTemporadaAndPuntuacion();
                     break;
+                case 8:
+                    System.out.println("**** Buscando episodio por titulo ****");
+                    this.buscarEpisodioPorTitulo();
+                    break;
+                case 9:
+                    System.out.println("**** Buscando top 5 episodios ****");
+                    this.buscarTop5Episodios();
+                    break;
                 default:
                     System.out.println("Opción invalida");
                     break;
@@ -81,6 +91,24 @@ public class Principal {
         } while (opcion != 0);
     }
 
+    private void buscarTop5Episodios() {
+        this.buscarSeriePorTitulo();
+        if(serieBuscada.isPresent()){
+            Serie serie = serieBuscada.get();
+            List<Episodio> topEpisodios = repositorio.top5Episodios(serie);
+            topEpisodios.forEach( e -> System.out.printf("Serie: %s Temporada: %s Episodio: %s Evaluacion: %s \n",
+                    e.getNombreSerie(), e.getTemporada(),e.getTitulo() ,e.getPuntuacionImdb()));
+        }
+    }
+
+    private void buscarEpisodioPorTitulo() {
+        System.out.println("Ingrese nombre del episodio a buscar: ");
+        var nombreEpisodio = sc.next();
+        sc.nextLine();
+        List<Episodio> episodiosEncontrados = repositorio.episodioPorNombre(nombreEpisodio);
+        episodiosEncontrados.forEach( e -> System.out.printf("Serie: %s Temporada: %s Episodio: %s Evaluacion: %s \n",
+                e.getNombreSerie(), e.getTemporada(),e.getTitulo() ,e.getPuntuacionImdb()));
+    }
     private void buscarSeriePorTemporadaAndPuntuacion() {
         System.out.println("Ingrese cantidad de temporadas: ");
         var cantTemporadas = sc.nextInt();
@@ -119,7 +147,7 @@ public class Principal {
         busqueda = sc.next();
         sc.nextLine();
 
-        Optional<Serie> serieBuscada = repositorio.findByTituloContainsIgnoreCase(busqueda);
+        serieBuscada = repositorio.findByTituloContainsIgnoreCase(busqueda);
 
         if(serieBuscada.isPresent()){
             System.out.println("La serie fue encontrada en la DB: " + serieBuscada.get());
@@ -173,6 +201,7 @@ public class Principal {
 
     public void buscarSerie() throws JsonProcessingException {
         DataSerie dataSerie = this.getDataSerie();
+        //TODO: Manejar valores nulos.
         //Guardar en db.
         Serie serie = new Serie(dataSerie);
         repositorio.save(serie);
