@@ -1,6 +1,7 @@
 package com.tecno3f.screenmatch.controller;
 
 import com.tecno3f.screenmatch.Repository.SerieRepository;
+import com.tecno3f.screenmatch.dto.EpisodioDTO;
 import com.tecno3f.screenmatch.dto.SerieDTO;
 import com.tecno3f.screenmatch.model.Serie;
 import com.tecno3f.screenmatch.service.SerieService;
@@ -37,4 +38,17 @@ public class SerieController {
     public SerieDTO obtenerPorId(@PathVariable Long id){
         return servicio.obtenerPorId(id);
     }
+    @GetMapping("/{id}/temporadas/{numeroTemporada}")
+    public List<EpisodioDTO> obtenerTemporadasPorNumero(@PathVariable Long id, @PathVariable Long numeroTemporada){
+        return servicio.obtenerTemporadasPorNumero(id,numeroTemporada);
+    }
+    @GetMapping("/{id}/temporadas/todas")
+    public List<EpisodioDTO> obtenerTodasLasTemporadas(@PathVariable Long id){
+        return servicio.obtenerTodasLasTemporadas(id);
+    }
+    @GetMapping("/categoria/{nombreGenero}")
+    public List<SerieDTO> obtenerSeriesPorCategoria(@PathVariable String nombreGenero){
+        return servicio.obtenerSeriesPorCategoria(nombreGenero);
+    }
+
 }
